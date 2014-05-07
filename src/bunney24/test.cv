@@ -1,0 +1,107 @@
+#include<stdio.h>
+#include "../bunny24.h"
+void printBinary(uint64_t x, int d)
+{
+  char buffer[d+1];
+  int index=0;
+  while(d>0)
+  {
+   if(x&1)
+     buffer[index++]='1';
+   else 
+     buffer[index++]='0';
+   x>>=1;
+   d--;
+  }
+  while(index>0)
+   printf(" %c", buffer[--index]);
+   return;
+}
+void testBunny()
+{
+// void enc_Bunny24(uint8_t* msgs, unsigned int n, uint64_t key, uint8_t* cipher);
+// uint64_t msg = 0x27583C;
+ uint8_t msg[3] = {0x27, 0x58, 0x3C};
+ uint64_t key = 0xF4D4D0;
+
+// uint64_t output =0;
+ uint8_t output[3] = {0};
+ BunnyTn_encrypt(msg, 3, key,output);
+ 
+ printf("key: ");
+ printBinary(key, 24);
+ printf("\n");
+
+ printf("Cipher: ");
+ int i;
+ for(i=0; i<3; i++)
+ {
+  printBinary(output[i], 8);
+ }
+// printBinary(output, 24);
+ printf("\n");
+
+ //uint64_t outs =output;
+ uint8_t outputs[3] = {0};
+ BunnyTn_decrypt(output, 3, key, outputs);
+ printf("msg: ");
+ //printBinary(msg, 24);
+  for(i=0; i<3; i++)
+ {
+  printBinary(msg[i], 8);
+ }
+ printf("\n");
+ printf("DMsg:");
+ for(i=0; i<3; i++)
+ {
+  printBinary(outputs[i], 8);
+ }
+// printBinary(output, 24);
+ printf("\n");
+}
+
+void testCBC()
+{
+  uint64_t iv =0x000000;
+  uint8_t out[6] = {0};
+  uint8_t msg[6] ={0x12, 0x34, 0x56, 0xaa, 0xaa, 0xaa};
+  uint64_t  key = 0x77C989;
+  iv= 0x42551B;
+  int i;
+  BunnyTncbc_encrypt(msg, 6, key, iv, out);
+
+ printf("B_CBC:  ");
+ int a = 6;
+ for(i=0; i<a; i++)
+   printBinary(out[i], 8);
+
+ uint8_t cipher[6] = {0xC7, 0x97, 0xC4, 0x4F, 0x2F, 0xDB}; 
+ printf("\nOrginal:");
+ for(i=0; i<a; i++)
+   printBinary(cipher[i], 8);
+ printf("\n");
+ uint8_t outr[6] = {0};
+
+ Bunnycbc_decrypt(cipher, 6, key, iv, outr);
+
+ printf("msg:    ");
+ for(i=0; i<a; i++)
+   printBinary(msg[i], 8);
+ printf("\n");
+
+ printf("Decrypt:");
+ for(i=0; i<a; i++)
+   printBinary(outr[i], 8);
+ printf("\n");
+}
+
+int main()
+{
+
+ //test_BunnyTN();
+ printf("Original:1 1 1 1 1 0 0 1 0 0 0 0 0 1 0 0 0 1 1 0 0 1 1 0\n");
+ //test_CBC();
+ testCBC();
+ testBunny();
+ return 0;
+}

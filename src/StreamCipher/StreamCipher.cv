@@ -1,0 +1,36 @@
+#include "../StreamCipher.h"
+
+void stream_encrypt(STREAMType type, uint64_t key, uint8_t *plain, uint8_t *chiper, int out_bits)  //length in bits
+{
+  if(length <=0)
+    return;
+
+  if(type == A51)
+  {
+   a51_encrypt(plain, key, cipher, out_bits);
+  }else  if(type == MAJ5)
+  {
+   maj5_encrypt(plain, key, cipher, out_bits);
+  }else  if(type == ALL5)
+  {
+      all5_encrypt(plain, key, cipher, out_bits);
+  }   
+}
+
+void stream_decrypt(STREAMType type,  uint64_t key, uint8_t *cipher, uint8_t *plain, int out_bits)
+{
+ if(length <=0)
+    return;
+
+   if(type == A51)
+  {
+   a51_decrypt(cipher, key, plain, out_bits);
+  }else  if(type == MAJ5)
+  {
+   maj5_decrypt(cipher, key, plain, out_bits);
+  }else  if(type == ALL5)
+  {
+     all5_decrypt(cipher, key, plain, out_bits);
+  }   
+   
+}

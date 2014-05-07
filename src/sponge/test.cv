@@ -1,0 +1,34 @@
+#include "../sponge.h"
+#include<stdio.h>
+
+void printBinaryx(uint64_t x, int d)
+{
+  char buffer[d+1];
+  int index=0;
+  while(d>0)
+  {
+   if(x&1)
+     buffer[index++]='1';
+   else 
+     buffer[index++]='0';
+   x>>=1;
+   d--;
+  }
+  while(index>0)
+   printf("%c", buffer[--index]);
+   return;
+}
+int main()
+{
+ uint64_t key = 0xFFFFFF;
+ uint8_t poutput[20] ={0};
+ uint8_t pml[7]={0x47, 0x0C, 0x39, 0xCF, 0x9A, 0xFC, 0xC0}; //0x2CC;
+ sponge_hash(pml,7, key, poutput);
+ printf("padding:\n");
+ int i;
+ for(i=0; i<20; i++)
+  printBinaryx(poutput[i], 8);
+ printf("\n");
+
+ return 0;
+}
